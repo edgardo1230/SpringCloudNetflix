@@ -1,1 +1,1 @@
-SpringCloudNetflix
+CloudNetflix

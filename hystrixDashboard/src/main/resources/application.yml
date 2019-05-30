@@ -1,0 +1,54 @@
+server:
+  port: ${appPort:9230}
+
+# Actuator endpoint path (/actuator/info, /actuator/health, ...)
+management.context-path: /actuator
+
+# http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
+endpoints:
+  enabled: false
+  info:
+    enabled: true
+  health:
+    enabled: true
+  metrics:
+    enabled: true
+
+info:
+  app:
+    name:@project.artifactId@
+  build:
+    version:@project.version@
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: ${peerUrls}
+  instance:
+    hostname: ${hostName}
+    statusPageUrlPath: ${management.context-path}/info
+    healthCheckUrlPath: ${management.context-path}/health
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 5
+    lease-expiration-duration-in-seconds: 5
+    metadataMap:
+      instanceId: ${spring.application.name}:${server.port}
+
+spring:
+  rabbitmq:
+    addresses: ${rabbitmq.host}
+    port: ${rabbitmq.port}
+    username: ${rabbitmq.username}
+    password: ${rabbitmq.password}
+    virtual-host: ${rabbitmq.virtual-host}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+      base-path: /

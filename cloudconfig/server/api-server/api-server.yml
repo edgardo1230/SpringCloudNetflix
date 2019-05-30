@@ -1,0 +1,42 @@
+server:
+  port: ${appPort:8200}
+
+# Actuator endpoint path (/admin/info, /admin/health, ...)
+server.servlet-path: /
+management.context-path: /admin
+
+# http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
+endpoints:
+  enabled: false
+  info:
+    enabled: true
+  health:
+    enabled: true
+    sensitive: false
+  metrics:
+    enabled: true
+
+info:
+  app:
+    name: @@project.artifactId@@
+  build:
+    version: @@project.version@@
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8000/eureka/
+
+
+zuul:
+  prefix: /v1
+  routes:
+    # http://localhost:8080/v1/company/
+    # company Api
+    company-api:
+      path: /company/**
+      serviceId: SERVICE-COMPANY
+      stripPrefix: true
+# ribbon.eureka.enabled: false

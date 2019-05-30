@@ -1,0 +1,54 @@
+server:
+  port: ${appPort:8000}
+
+# Actuator endpoint path (/admin/info, /admin/health, ...)
+server.servlet-path: /
+management.context-path: /admin
+
+# http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints
+endpoints:
+  enabled: false
+  info:
+    enabled: true
+  health:
+    enabled: true
+    sensitive: false
+  metrics:
+    enabled: true
+
+info:
+  app:
+    name: @@project.artifactId@@
+  build:
+    version: @@project.version@@
+
+eureka:
+  environment: ${environment}
+  datacenter: ${dataCenter}
+  enableSelfPreservation: false
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: ${peerUrls}
+  instance:
+    hostname: ${hostName}
+    statusPageUrlPath: ${management.contextPath}/info
+    healthCheckUrlPath: ${management.contextPath}/health
+    preferIpAddress: true
+    metadataMap:
+      instanceId: ${spring.application.name}:${server.port}
+#  server:
+#    eviction-interval-timer-in-ms: 4000
+---
+spring:
+  profiles: standalone
+hostName: localhost
+environment: local
+dataCenter: ${hostName}
+peerUrls: http://localhost:${server.port}/eureka/
+
+---
+spring:
+  profiles: peerAware
+# -DappPort=<port> -DhostName=<hostname> -DdataCenter=<data center> -e environment=<dev|test|staging|prod> -DpeerUrls=http://host1:port1/eureka/,http://host2:port2/eureka/,...

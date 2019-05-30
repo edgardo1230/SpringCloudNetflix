@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: ${appName:discovery-server}
+#  cloud:
+#    config:
+#      uri: http://localhost:8101/
+#  rabbitmq:
+#    addresses: ${rabbitmq.host}
+#    port: ${rabbitmq.port}
+#    username: ${rabbitmq.username}
+#    password: ${rabbitmq.password}
+#    virtual-host: ${rabbitmq.virtual-host}
+#info:
+#  app:
+#    name:@project.artifactId@
+#  build:
+#    version:@project.version@
